@@ -92,7 +92,7 @@ FAST API - RUTHEESHWARAN P (github-id : rutheeshwaran)
 
 Database - RUTHEESHWARAN P (github-id : rutheeshwaran)
 
-Relational database (MySQL) - RUTHEESHWARAN P (github-id : rutheeshwaran)
+Relational database (MySQL workbench) - RUTHEESHWARAN P (github-id : rutheeshwaran)
 
 Structured storage for trips, cities, activities, and costs - RUTHEESHWARAN P (github-id : rutheeshwaran)
 
