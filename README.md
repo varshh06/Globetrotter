@@ -1,5 +1,5 @@
 # Globetrotter
-caution: We have not fully completed the project that is we didnt debug the code, but our all different phases of th project are working successsfully. The working of each phase of the code is explanined by all our team members in the video
+caution: We have not fully completed the project that is we didnt debug the code, but our all different phases of the project are working successsfully. The working of each phase of the code is explanined by all our team members in the video
 
 
 🌍 GlobeTrotter
