@@ -1,0 +1,88 @@
+<html>
+<head>
+    <title>GlobalTrotter - Dashboard</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+</head>
+<body>
+
+    <nav class="navbar">
+    <div class="nav-container">
+
+        <div class="nav-logo">
+            <a href="dashboard.html">GlobalTrotter</a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="trip-list.html">Trips</a></li>
+            <li><a href="create-trip.html">Create Trip</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="user-profile.html">Profile</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+    <div class="container">
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 30px;">
+            <div style="height: 300px; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 2em;">
+           
+                Discover Your Next Adventure
+            </div>
+        </div>
+        <div class="card">
+            <h2 class="card-title">Top Regional Selections</h2>
+            <div class="grid-4" id="topRegions">
+    <div class="region-card" style="text-align: center;">
+        <div style="
+            height: 150px;
+            background-image: url('assets/paris.jpg');
+            background-size: cover;
+            background-position: center;
+            border-radius: 8px;
+            margin-bottom: 10px;
+        "></div>
+        <h4>Paris, France</h4>
+    </div>
+</div>
+
+        </div>
+        
+        <div class="card">
+            <h2 class="card-title">Previous Trips</h2>
+            <div class="grid-3" id="previousTrips">
+                <div class="trip-card">
+                    <h4>Japan Adventure</h4>
+                    <p>Tokyo, Kyoto, Osaka</p>
+                    <small>March 2023</small>
+                </div>
+            </div>
+        </div>
+
+        <div style="text-align: center; margin-top: 40px;">
+            <a href="create-trip.html" class="btn btn-success btn-large">+ Plan a Trip</a>
+        </div>
+    </div>
+
+    <script src="JS/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const topRegions = [
+                { name: 'Paris, France', image: 'paris.jpg' },
+                { name: 'Tokyo, Japan', image: 'tokyo.jpg' },
+                { name: 'New York, USA', image: 'nyc.jpg' },
+                { name: 'Bali, Indonesia', image: 'bali.jpg' }
+            ];
+            
+            const previousTrips = [
+                { name: 'Japan Adventure', places: 'Tokyo, Kyoto, Osaka', date: 'March 2023' },
+                { name: 'European Tour', places: 'Paris, Rome, Barcelona', date: 'August 2022' },
+                { name: 'Tropical Getaway', places: 'Maldives, Bali', date: 'December 2022' }
+            ];
+            
+        });
+    </script>
+</body>
+</html>

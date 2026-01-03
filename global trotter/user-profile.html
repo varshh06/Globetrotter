@@ -1,0 +1,870 @@
+<html>
+<head>
+    <title>GlobalTrotter - User Profile</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .profile-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 30px;
+            border-bottom: 2px solid #eee;
+        }
+        
+        .profile-title {
+            font-size: 32px;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .profile-subtitle {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .profile-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 40px;
+        }
+        
+        .profile-sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .profile-avatar {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+        
+        .avatar-image {
+            width: 150px;
+            height: 150px;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 48px;
+            font-weight: 600;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .avatar-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .avatar-edit {
+            position: absolute;
+            bottom: 10px;
+            right: 10px;
+            background: white;
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--primary-color);
+            cursor: pointer;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+        
+        .profile-name {
+            font-size: 24px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 5px;
+        }
+        
+        .profile-location {
+            color: #666;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 5px;
+            margin-bottom: 20px;
+        }
+        
+        .profile-stats {
+            display: flex;
+            justify-content: space-around;
+            margin: 25px 0;
+            padding: 20px 0;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .stat-item {
+            text-align: center;
+        }
+        
+        .stat-value {
+            font-size: 24px;
+            font-weight: 700;
+            color: var(--primary-color);
+            display: block;
+        }
+        
+        .stat-label {
+            font-size: 12px;
+            color: #666;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        .profile-actions {
+            margin-top: 25px;
+        }
+        
+        .profile-actions button {
+            width: 100%;
+            margin-bottom: 10px;
+        }
+        
+        .profile-content {
+            display: flex;
+            flex-direction: column;
+            gap: 30px;
+        }
+        
+        .profile-section {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+        }
+        
+        .section-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .section-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        .edit-icon {
+            color: var(--primary-color);
+            cursor: pointer;
+            font-size: 18px;
+        }
+        
+        .detail-row {
+            display: flex;
+            margin-bottom: 20px;
+        }
+        
+        .detail-label {
+            width: 150px;
+            font-weight: 600;
+            color: #555;
+        }
+        
+        .detail-value {
+            flex: 1;
+            color: #333;
+        }
+        
+        .trip-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-top: 20px;
+        }
+        
+        .mini-trip-card {
+            background: #f8f9fa;
+            border-radius: 8px;
+            padding: 20px;
+            cursor: pointer;
+            transition: all 0.3s;
+            border-left: 4px solid var(--primary-color);
+        }
+        
+        .mini-trip-card:hover {
+            background: #e3f2fd;
+            transform: translateY(-3px);
+        }
+        
+        .mini-trip-title {
+            font-weight: 600;
+            margin-bottom: 8px;
+            color: var(--dark-color);
+        }
+        
+        .mini-trip-dates {
+            font-size: 12px;
+            color: #666;
+            margin-bottom: 10px;
+        }
+        
+        .mini-trip-destination {
+            font-size: 14px;
+            color: var(--primary-color);
+            margin-bottom: 10px;
+        }
+        
+        .view-btn-small {
+            padding: 5px 15px;
+            font-size: 12px;
+            background: white;
+            border: 1px solid var(--primary-color);
+            color: var(--primary-color);
+            border-radius: 15px;
+            cursor: pointer;
+            transition: all 0.3s;
+            display: inline-block;
+            text-align: center;
+        }
+        
+        .view-btn-small:hover {
+            background: var(--primary-color);
+            color: white;
+        }
+        
+        .form-edit {
+            display: none;
+        }
+        
+        .form-edit.active {
+            display: block;
+        }
+        
+        .info-display {
+            display: block;
+        }
+        
+        .info-display.hidden {
+            display: none;
+        }
+        
+        .animal-name {
+            font-style: italic;
+            color: #888;
+            font-size: 12px;
+            margin-top: 10px;
+            text-align: center;
+        }
+        
+        .preplanned-trips, .previous-trips {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .trip-preview {
+            background: #f5f7fa;
+            border-radius: 8px;
+            padding: 15px;
+            position: relative;
+        }
+        
+        .trip-preview:hover .trip-overlay {
+            opacity: 1;
+        }
+        
+        .trip-image-small {
+            height: 120px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            border-radius: 5px;
+            margin-bottom: 10px;
+        }
+        
+        .trip-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.7);
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.3s;
+        }
+        
+        .overlay-buttons {
+            display: flex;
+            gap: 10px;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0,0,0,0.5);
+            z-index: 1000;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .modal-content {
+            background: white;
+            border-radius: 10px;
+            padding: 30px;
+            width: 90%;
+            max-width: 500px;
+        }
+        
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .modal-title {
+            font-size: 20px;
+            font-weight: 600;
+        }
+        
+        .modal-close {
+            cursor: pointer;
+            font-size: 24px;
+            color: #666;
+        }
+        
+        .settings-option {
+            padding: 15px;
+            border: 1px solid #eee;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .settings-option:hover {
+            background: #f8f9fa;
+            border-color: var(--primary-color);
+        }
+        
+        @media (max-width: 1024px) {
+            .profile-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .profile-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    
+    <nav class="navbar">
+    <div class="nav-container">
+
+        <div class="nav-logo">
+            <a href="dashboard.html">GlobalTrotter</a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="trip-list.html">Trips</a></li>
+            <li><a href="create-trip.html">Create Trip</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="user-profile.html">Profile</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+    <div class="container">
+        <div class="profile-header">
+            <div>
+                <h1 class="profile-title">User Profile</h1>
+                <p class="profile-subtitle">Manage your personal information and travel preferences</p>
+            </div>
+            <div>
+                <button class="btn btn-primary" onclick="openEditModal()">
+                    <i class="fas fa-edit"></i> Edit Profile
+                </button>
+            </div>
+        </div>
+
+        <div class="profile-layout">
+       
+            <div class="profile-sidebar">
+                <div class="profile-avatar">
+                    <div class="avatar-image" id="userAvatar">
+                        VF
+                    </div>
+                    <div class="avatar-edit" onclick="changeAvatar()">
+                        <i class="fas fa-camera"></i>
+                    </div>
+                    <h2 class="profile-name" id="userName">Kavin</h2>
+                    <div class="profile-location">
+                        <i class="fas fa-map-marker-alt"></i>
+                        <span id="userLocation">Trichy, Tamil Nadu, India</span>
+                    </div>
+                    <div class="animal-name">chiyaan
+                        
+                    </div>
+                </div>
+                
+                <div class="profile-stats">
+                    <div class="stat-item">
+                        <span class="stat-value" id="totalTrips">8</span>
+                        <span class="stat-label">Trips</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="daysTraveled">42</span>
+                        <span class="stat-label">Days</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-value" id="countriesVisited">12</span>
+                        <span class="stat-label">Countries</span>
+                    </div>
+                </div>
+                
+                <div class="profile-actions">
+                    <button class="btn btn-primary" onclick="openEditModal()">
+                        <i class="fas fa-user-edit"></i> Edit Profile
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='trip-list.html'">
+                        <i class="fas fa-suitcase"></i> View All Trips
+                    </button>
+                    <button class="btn btn-secondary" onclick="window.location.href='calendar.html'">
+                        <i class="fas fa-calendar-alt"></i> View Calendar
+                    </button>
+                    <button class="btn btn-danger" onclick="logout()">
+                        <i class="fas fa-sign-out-alt"></i> Logout
+                    </button>
+                </div>
+            </div>
+            
+            
+            <div class="profile-content">
+                
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h3 class="section-title">User Details</h3>
+                        <i class="fas fa-edit edit-icon" onclick="toggleEdit('personalInfo')"></i>
+                    </div>
+                    
+                    <div class="info-display" id="personalInfoDisplay">
+                        <div class="detail-row">
+                            <div class="detail-label">Full Name:</div>
+                            <div class="detail-value" id="displayFullName">John Smith</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Email:</div>
+                            <div class="detail-value" id="displayEmail">john.smith@example.com</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Phone:</div>
+                            <div class="detail-value" id="displayPhone">+1 (555) 123-4567</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Date of Birth:</div>
+                            <div class="detail-value" id="displayDob">March 15, 1990</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Nationality:</div>
+                            <div class="detail-value" id="displayNationality">American</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Preferred Language:</div>
+                            <div class="detail-value" id="displayLanguage">English</div>
+                        </div>
+                    </div>
+             
+                    <form class="form-edit" id="personalInfoForm">
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">First Name</label>
+                                <input type="text" class="form-control" id="firstName" value="John">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Last Name</label>
+                                <input type="text" class="form-control" id="lastName" value="Smith">
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Email Address</label>
+                            <input type="email" class="form-control" id="email" value="john.smith@example.com">
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Phone Number</label>
+                            <input type="tel" class="form-control" id="phone" value="+15551234567">
+                        </div>
+                        
+                        <div class="form-row">
+                            <div class="form-group">
+                                <label class="form-label">Date of Birth</label>
+                                <input type="date" class="form-control" id="dob" value="1990-03-15">
+                            </div>
+                            <div class="form-group">
+                                <label class="form-label">Nationality</label>
+                                <select class="form-control" id="nationality">
+                                    <option>American</option>
+                                    <option>Canadian</option>
+                                    <option>British</option>
+                                    <option>Australian</option>
+                                </select>
+                            </div>
+                        </div>
+                        
+                        <div class="form-group">
+                            <label class="form-label">Preferred Language</label>
+                            <select class="form-control" id="language">
+                                <option>English</option>
+                                <option>Spanish</option>
+                                <option>French</option>
+                                <option>German</option>
+                            </select>
+                        </div>
+                        
+                        <div style="display: flex; gap: 10px; margin-top: 20px;">
+                            <button type="button" class="btn btn-primary" onclick="savePersonalInfo()">
+                                Save Changes
+                            </button>
+                            <button type="button" class="btn btn-secondary" onclick="toggleEdit('personalInfo')">
+                                Cancel
+                            </button>
+                        </div>
+                    </form>
+                </div>
+                
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Travel Preferences</h3>
+                        <i class="fas fa-edit edit-icon" onclick="toggleEdit('preferences')"></i>
+                    </div>
+                    
+                    <div class="info-display" id="preferencesDisplay">
+                        <div class="detail-row">
+                            <div class="detail-label">Travel Style:</div>
+                            <div class="detail-value">Adventure & Cultural</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Budget Range:</div>
+                            <div class="detail-value">$2,000 - $5,000 per trip</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Preferred Accommodation:</div>
+                            <div class="detail-value">Boutique Hotels & Apartments</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Dietary Restrictions:</div>
+                            <div class="detail-value">None</div>
+                        </div>
+                        <div class="detail-row">
+                            <div class="detail-label">Accessibility Needs:</div>
+                            <div class="detail-value">None</div>
+                        </div>
+                    </div>
+                    
+                    <form class="form-edit" id="preferencesForm">
+                      
+                        <div style="text-align: center; padding: 20px; color: #666;">
+                            Preferences editing form would appear here
+                        </div>
+                    </form>
+                </div>
+              
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Preplanned Trips</h3>
+                        <span style="color: #666; font-size: 14px;">
+                            Upcoming trips that are being planned
+                        </span>
+                    </div>
+                    
+                    <div class="preplanned-trips">
+                        <div class="trip-preview">
+                            <div class="trip-image-small"></div>
+                            <div class="mini-trip-title">Summer Europe 2024</div>
+                            <div class="mini-trip-dates">Jun 15 - 30, 2024</div>
+                            <div class="view-btn-small" onclick="viewTrip(6)">View</div>
+                            <div class="trip-overlay">
+                                <div class="overlay-buttons">
+                                    <button class="btn btn-primary" onclick="manageTrip(6)">Manage</button>
+                                    <button class="btn btn-secondary" onclick="viewTrip(6)">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="trip-preview">
+                            <div class="trip-image-small" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);"></div>
+                            <div class="mini-trip-title">Asia Explorer</div>
+                            <div class="mini-trip-dates">Nov 2024</div>
+                            <div class="view-btn-small" onclick="viewTrip(7)">View</div>
+                            <div class="trip-overlay">
+                                <div class="overlay-buttons">
+                                    <button class="btn btn-primary" onclick="manageTrip(7)">Manage</button>
+                                    <button class="btn btn-secondary" onclick="viewTrip(7)">View</button>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="trip-preview">
+                            <div class="trip-image-small" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);"></div>
+                            <div class="mini-trip-title">Winter Ski Trip</div>
+                            <div class="mini-trip-dates">Dec 2024</div>
+                            <div class="view-btn-small" onclick="viewTrip(8)">View</div>
+                            <div class="trip-overlay">
+                                <div class="overlay-buttons">
+                                    <button class="btn btn-primary" onclick="manageTrip(8)">Manage</button>
+                                    <button class="btn btn-secondary" onclick="viewTrip(8)">View</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="animal-name">Adventurous Badger</div>
+                </div>
+                
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Previous Trips</h3>
+                        <span style="color: #666; font-size: 14px;">
+                            Completed travel experiences
+                        </span>
+                    </div>
+                    
+                    <div class="previous-trips">
+                        <div class="trip-preview">
+                            <div class="trip-image-small" style="background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%);"></div>
+                            <div class="mini-trip-title">Japan Adventure</div>
+                            <div class="mini-trip-dates">Jan 2024</div>
+                            <div class="view-btn-small" onclick="viewTrip(1)">Relive</div>
+                        </div>
+                        
+                        <div class="trip-preview">
+                            <div class="trip-image-small" style="background: linear-gradient(135deg, #fa709a 0%, #fee140 100%);"></div>
+                            <div class="mini-trip-title">Paris Trip</div>
+                            <div class="mini-trip-dates">Jan 2024</div>
+                            <div class="view-btn-small" onclick="viewTrip(2)">Relive</div>
+                        </div>
+                        
+                        <div class="trip-preview">
+                            <div class="trip-image-small" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                            <div class="mini-trip-title">European Tour</div>
+                            <div class="mini-trip-dates">Dec 2023</div>
+                            <div class="view-btn-small" onclick="viewTrip(4)">Relive</div>
+                        </div>
+                    </div>
+                    <div class="animal-name">Sophisticated Gerbil</div>
+                </div>
+                
+                <div class="profile-section">
+                    <div class="section-header">
+                        <h3 class="section-title">Account Settings</h3>
+                    </div>
+                    
+                    <div class="settings-option" onclick="openSettings('notifications')">
+                        <i class="fas fa-bell"></i> Notification Settings
+                    </div>
+                    
+                    <div class="settings-option" onclick="openSettings('privacy')">
+                        <i class="fas fa-lock"></i> Privacy & Security
+                    </div>
+                    
+                    <div class="settings-option" onclick="openSettings('payment')">
+                        <i class="fas fa-credit-card"></i> Payment Methods
+                    </div>
+                    
+                    <div class="settings-option" onclick="openSettings('linked')">
+                        <i class="fas fa-link"></i> Linked Accounts
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="modal" id="editModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 class="modal-title">Edit Profile</h3>
+                <span class="modal-close" onclick="closeEditModal()">&times;</span>
+            </div>
+            <div style="text-align: center; padding: 40px 20px; color: #666;">
+                <p>Complete profile editing form would appear here</p>
+                <p>This would include all user details with save to backend functionality</p>
+            </div>
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button class="btn btn-primary" onclick="saveProfile()">
+                    <i class="fas fa-save"></i> Save to Backend
+                </button>
+                <button class="btn btn-secondary" onclick="closeEditModal()">
+                    Cancel
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <script src="JS/script.js"></script>
+    <script>
+        let editMode = {
+            personalInfo: false,
+            preferences: false
+        };
+        
+      
+        document.addEventListener('DOMContentLoaded', function() {
+           
+            const userData = {
+                fullName: 'Kavin',
+                email: 'Kavinanimation@example.com',
+                phone: '+91 98765 43210',
+                dob: 'April 04 2005',
+                nationality: 'Indian',
+                language: 'English',
+                location: 'Trichy, Tamil Nadu, India',
+                stats: {
+                    trips: 8,
+                    days: 42,
+                    countries: 12
+                }
+            };
+            
+         
+            document.getElementById('displayFullName').textContent = userData.fullName;
+            document.getElementById('displayEmail').textContent = userData.email;
+            document.getElementById('displayPhone').textContent = userData.phone;
+            document.getElementById('displayDob').textContent = userData.dob;
+            document.getElementById('displayNationality').textContent = userData.nationality;
+            document.getElementById('displayLanguage').textContent = userData.language;
+            document.getElementById('userLocation').textContent = userData.location;
+            document.getElementById('totalTrips').textContent = userData.stats.trips;
+            document.getElementById('daysTraveled').textContent = userData.stats.days;
+            document.getElementById('countriesVisited').textContent = userData.stats.countries;
+            
+            const nameParts = userData.fullName.split(' ');
+            const initials = nameParts.map(part => part.charAt(0)).join('');
+            document.getElementById('userAvatar').textContent = initials;
+        });
+        
+        function toggleEdit(section) {
+            editMode[section] = !editMode[section];
+            
+            const displayId = `${section}Display`;
+            const formId = `${section}Form`;
+            
+            document.getElementById(displayId).classList.toggle('hidden');
+            document.getElementById(formId).classList.toggle('active');
+            
+            if (section === 'personalInfo' && editMode[section]) {
+           
+                const fullName = document.getElementById('displayFullName').textContent;
+                const nameParts = fullName.split(' ');
+                document.getElementById('firstName').value = nameParts[0] || '';
+                document.getElementById('lastName').value = nameParts[1] || '';
+               
+            }
+        }
+        
+        function savePersonalInfo() {
+            const firstName = document.getElementById('firstName').value;
+            const lastName = document.getElementById('lastName').value;
+            const email = document.getElementById('email').value;
+            const phone = document.getElementById('phone').value;
+            const dob = document.getElementById('dob').value;
+            const nationality = document.getElementById('nationality').value;
+            const language = document.getElementById('language').value;
+            
+        
+            console.log('Saving personal info to backend:', {
+                firstName, lastName, email, phone, dob, nationality, language
+            });
+            
+      
+            alert('Personal information saved to backend database!');
+      
+            document.getElementById('displayFullName').textContent = `${firstName} ${lastName}`;
+            document.getElementById('displayEmail').textContent = email;
+            document.getElementById('displayPhone').textContent = formatPhone(phone);
+            document.getElementById('displayDob').textContent = formatDate(dob);
+            document.getElementById('displayNationality').textContent = nationality;
+            document.getElementById('displayLanguage').textContent = language;
+            
+          
+            document.getElementById('userAvatar').textContent = 
+                firstName.charAt(0) + lastName.charAt(0);
+            
+            toggleEdit('personalInfo');
+        }
+        
+        function formatDate(dateString) {
+            const date = new Date(dateString);
+            return date.toLocaleDateString('en-US', {
+                month: 'long',
+                day: 'numeric',
+                year: 'numeric'
+            });
+        }
+        
+        function formatPhone(phone) {
+       
+            return phone.replace(/(\d{1})(\d{3})(\d{3})(\d{4})/, '+$1 ($2) $3-$4');
+        }
+        
+        function changeAvatar() {
+          
+            alert('Avatar upload functionality would connect to backend storage');
+        }
+        
+        function openEditModal() {
+            document.getElementById('editModal').style.display = 'flex';
+        }
+        
+        function closeEditModal() {
+            document.getElementById('editModal').style.display = 'none';
+        }
+        
+        function saveProfile() {
+         
+            alert('Complete profile saved to backend database!');
+            closeEditModal();
+        }
+        
+        function logout() {
+          
+            alert('Logging out... Session will be cleared.');
+            window.location.href = 'index.html';
+        }
+        
+        function viewTrip(tripId) {
+            alert(`Viewing trip #${tripId} details\n(Data fetched from backend)`);
+        }
+        
+        function manageTrip(tripId) {
+            alert(`Managing trip #${tripId}\nRedirecting to edit page...`);
+        }
+        
+        function openSettings(settingType) {
+            alert(`Opening ${settingType} settings\n(Would connect to backend preferences)`);
+        }
+    </script>
+</body>
+</html>

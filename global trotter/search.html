@@ -1,0 +1,641 @@
+<html>
+<head>
+    <title>GlobalTrotter - Search Activities</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        .search-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .search-title {
+            font-size: 28px;
+            color: var(--dark-color);
+            font-weight: 600;
+        }
+        
+        .search-subtitle {
+            color: #666;
+            margin-top: 5px;
+        }
+        
+        .results-count {
+            color: #666;
+            font-size: 14px;
+        }
+        
+        .activity-card {
+            background: white;
+            border-radius: 10px;
+            overflow: hidden;
+            margin-bottom: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            transition: transform 0.3s, box-shadow 0.3s;
+        }
+        
+        .activity-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 5px 25px rgba(0,0,0,0.15);
+        }
+        
+        .activity-image {
+            height: 200px;
+            background-color: #e0e0e0;
+            position: relative;
+            overflow: hidden;
+        }
+        
+        .activity-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+        
+        .activity-badge {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: var(--accent-color);
+            color: white;
+            padding: 5px 12px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        
+        .activity-content {
+            padding: 25px;
+        }
+        
+        .activity-title {
+            font-size: 22px;
+            font-weight: 600;
+            color: var(--dark-color);
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .activity-price {
+            color: var(--primary-color);
+            font-size: 24px;
+            font-weight: 700;
+        }
+        
+        .activity-location {
+            color: #666;
+            margin-bottom: 15px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .activity-location i {
+            color: var(--accent-color);
+        }
+        
+        .activity-description {
+            color: #555;
+            line-height: 1.6;
+            margin-bottom: 20px;
+        }
+        
+        .activity-features {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+            margin-bottom: 20px;
+        }
+        
+        .feature-tag {
+            background: #f5f7fa;
+            padding: 6px 15px;
+            border-radius: 20px;
+            font-size: 13px;
+            color: #555;
+        }
+        
+        .activity-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .activity-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+        
+        .stars {
+            color: #ffc107;
+        }
+        
+        .rating-value {
+            font-weight: 600;
+            margin-left: 5px;
+        }
+        
+        .reviews {
+            color: #666;
+            font-size: 13px;
+            margin-left: 10px;
+        }
+        
+        .filters-sidebar {
+            background: white;
+            border-radius: 10px;
+            padding: 25px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.08);
+            height: fit-content;
+            position: sticky;
+            top: 20px;
+        }
+        
+        .filter-section {
+            margin-bottom: 25px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #eee;
+        }
+        
+        .filter-section:last-child {
+            border-bottom: none;
+            margin-bottom: 0;
+            padding-bottom: 0;
+        }
+        
+        .filter-title {
+            font-weight: 600;
+            margin-bottom: 15px;
+            color: var(--dark-color);
+            font-size: 16px;
+        }
+        
+        .filter-option {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+            cursor: pointer;
+        }
+        
+        .filter-option:hover .option-label {
+            color: var(--primary-color);
+        }
+        
+        .option-label {
+            font-size: 14px;
+            color: #555;
+        }
+        
+        .option-count {
+            background: #f5f7fa;
+            padding: 2px 10px;
+            border-radius: 10px;
+            font-size: 12px;
+            color: #666;
+        }
+        
+        .price-range {
+            margin-top: 15px;
+        }
+        
+        .price-inputs {
+            display: flex;
+            gap: 10px;
+            margin-top: 10px;
+        }
+        
+        .price-inputs input {
+            flex: 1;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        
+        .search-layout {
+            display: grid;
+            grid-template-columns: 300px 1fr;
+            gap: 30px;
+        }
+        
+        .search-results-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .sort-options {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        
+        .sort-select {
+            padding: 8px 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+        }
+        
+        .pagination {
+            display: flex;
+            justify-content: center;
+            gap: 10px;
+            margin-top: 40px;
+            padding-top: 20px;
+            border-top: 1px solid #eee;
+        }
+        
+        .page-btn {
+            width: 40px;
+            height: 40px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            background: white;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+        
+        .page-btn:hover {
+            border-color: var(--primary-color);
+            color: var(--primary-color);
+        }
+        
+        .page-btn.active {
+            background: var(--primary-color);
+            color: white;
+            border-color: var(--primary-color);
+        }
+        
+        .animal-name {
+            font-style: italic;
+            color: #888;
+            font-size: 12px;
+            margin-top: 5px;
+        }
+        
+        @media (max-width: 1024px) {
+            .search-layout {
+                grid-template-columns: 1fr;
+            }
+            
+            .filters-sidebar {
+                position: static;
+            }
+        }
+    </style>
+</head>
+<body>
+    <nav class="navbar">
+    <div class="nav-container">
+
+        <div class="nav-logo">
+            <a href="dashboard.html">GlobalTrotter</a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="trip-list.html">Trips</a></li>
+            <li><a href="create-trip.html">Create Trip</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="user-profile.html">Profile</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+    <div class="container">
+        <div class="search-header">
+            <div>
+                <h1 class="search-title">Activity Search</h1>
+                <p class="search-subtitle">Find amazing activities and experiences</p>
+            </div>
+            <div class="results-count" id="resultsCount">Showing 8 results</div>
+        </div>
+
+        <div class="search-layout">
+            <div class="filters-sidebar">
+                <h3 style="margin-bottom: 25px; color: var(--dark-color);">Filters</h3>
+                
+                <div class="filter-section">
+                    <div class="filter-title">Categories</div>
+                    <div class="filter-option">
+                        <span class="option-label">Adventure</span>
+                        <span class="option-count">24</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">Cultural</span>
+                        <span class="option-count">18</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">Food & Drink</span>
+                        <span class="option-count">15</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">Relaxation</span>
+                        <span class="option-count">12</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">Sports</span>
+                        <span class="option-count">9</span>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <div class="filter-title">Price Range</div>
+                    <input type="range" min="0" max="1000" value="500" class="price-range" style="width: 100%;">
+                    <div class="price-inputs">
+                        <input type="number" placeholder="$0" value="0">
+                        <span>to</span>
+                        <input type="number" placeholder="$1000" value="500">
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <div class="filter-title">Duration</div>
+                    <div class="filter-option">
+                        <span class="option-label">Half Day</span>
+                        <span class="option-count">14</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">Full Day</span>
+                        <span class="option-count">22</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">Multi-day</span>
+                        <span class="option-count">8</span>
+                    </div>
+                </div>
+                
+                <div class="filter-section">
+                    <div class="filter-title">Rating</div>
+                    <div class="filter-option">
+                        <span class="option-label">4+ Stars</span>
+                        <span class="option-count">38</span>
+                    </div>
+                    <div class="filter-option">
+                        <span class="option-label">3+ Stars</span>
+                        <span class="option-count">45</span>
+                    </div>
+                </div>
+                
+                <button class="btn btn-primary" style="width: 100%; margin-top: 20px;">
+                    Apply Filters
+                </button>
+                
+                <button class="btn btn-secondary" style="width: 100%; margin-top: 10px;">
+                    Clear All
+                </button>
+            </div>
+            
+            <div class="search-results">
+                <div class="search-results-header">
+                    <h3 style="font-weight: 600;">Results for "Paragliding"</h3>
+                    <div class="sort-options">
+                        <span>Sort by:</span>
+                        <select class="sort-select">
+                            <option>Relevance</option>
+                            <option>Price: Low to High</option>
+                            <option>Price: High to Low</option>
+                            <option>Rating</option>
+                            <option>Popularity</option>
+                        </select>
+                    </div>
+                </div>
+                <div id="activitiesList">
+                    <div class="activity-card">
+                        <div class="activity-image">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                <i class="fas fa-parachute-box"></i>
+                            </div>
+                            <div class="activity-badge">Popular</div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                <span>Euphoric Wolf Paragliding</span>
+                                <span class="activity-price">$150</span>
+                            </div>
+                            <div class="activity-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Swiss Alps, Switzerland</span>
+                            </div>
+                            <p class="activity-description">
+                                Experience the thrill of paragliding over beautiful mountain ranges with experienced instructors. 
+                                Includes training, equipment, and professional guidance.
+                            </p>
+                            <div class="activity-features">
+                                <span class="feature-tag">Adventure</span>
+                                <span class="feature-tag">Half Day</span>
+                                <span class="feature-tag">Equipment Provided</span>
+                                <span class="feature-tag">Guide Included</span>
+                            </div>
+                            <div class="activity-footer">
+                                <div class="activity-rating">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="rating-value">4.8</span>
+                                    <span class="reviews">(124 reviews)</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="bookActivity(1)">
+                                    <i class="fas fa-calendar-plus"></i> Book Now
+                                </button>
+                            </div>
+                            <div class="animal-name">Euphoric Wolf</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-image">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                <i class="fas fa-water"></i>
+                            </div>
+                            <div class="activity-badge">Best Value</div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                <span>Scuba Diving Adventure</span>
+                                <span class="activity-price">$120</span>
+                            </div>
+                            <div class="activity-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Great Barrier Reef, Australia</span>
+                            </div>
+                            <p class="activity-description">
+                                Explore the underwater world with professional dive masters. 
+                                See colorful coral reefs and diverse marine life.
+                            </p>
+                            <div class="activity-features">
+                                <span class="feature-tag">Water Sports</span>
+                                <span class="feature-tag">Full Day</span>
+                                <span class="feature-tag">Certified Instructors</span>
+                            </div>
+                            <div class="activity-footer">
+                                <div class="activity-rating">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                    </div>
+                                    <span class="rating-value">5.0</span>
+                                    <span class="reviews">(89 reviews)</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="bookActivity(2)">
+                                    <i class="fas fa-calendar-plus"></i> Book Now
+                                </button>
+                            </div>
+                            <div class="animal-name">Lawful Bear</div>
+                        </div>
+                    </div>
+                    
+                    <div class="activity-card">
+                        <div class="activity-image">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #43e97b 0%, #38f9d7 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                <i class="fas fa-hiking"></i>
+                            </div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                <span>Mountain Hiking Tour</span>
+                                <span class="activity-price">$85</span>
+                            </div>
+                            <div class="activity-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Rocky Mountains, Canada</span>
+                            </div>
+                            <p class="activity-description">
+                                Guided hiking tour through scenic mountain trails. 
+                                Suitable for all experience levels. Lunch included.
+                            </p>
+                            <div class="activity-features">
+                                <span class="feature-tag">Hiking</span>
+                                <span class="feature-tag">Nature</span>
+                                <span class="feature-tag">Lunch Included</span>
+                            </div>
+                            <div class="activity-footer">
+                                <div class="activity-rating">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="far fa-star"></i>
+                                    </div>
+                                    <span class="rating-value">4.2</span>
+                                    <span class="reviews">(67 reviews)</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="bookActivity(3)">
+                                    <i class="fas fa-calendar-plus"></i> Book Now
+                                </button>
+                            </div>
+                            <div class="animal-name">Admired Okapi</div>
+                        </div>
+                    </div>
+                    <div class="activity-card">
+                        <div class="activity-image">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #ff9a9e 0%, #fad0c4 100%); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px;">
+                                <i class="fas fa-utensils"></i>
+                            </div>
+                        </div>
+                        <div class="activity-content">
+                            <div class="activity-title">
+                                <span>Italian Cooking Class</span>
+                                <span class="activity-price">$95</span>
+                            </div>
+                            <div class="activity-location">
+                                <i class="fas fa-map-marker-alt"></i>
+                                <span>Tuscany, Italy</span>
+                            </div>
+                            <p class="activity-description">
+                                Learn to cook authentic Italian dishes with local chefs. 
+                                Includes market visit and wine pairing.
+                            </p>
+                            <div class="activity-features">
+                                <span class="feature-tag">Cooking</span>
+                                <span class="feature-tag">Cultural</span>
+                                <span class="feature-tag">Food Included</span>
+                            </div>
+                            <div class="activity-footer">
+                                <div class="activity-rating">
+                                    <div class="stars">
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star"></i>
+                                        <i class="fas fa-star-half-alt"></i>
+                                    </div>
+                                    <span class="rating-value">4.7</span>
+                                    <span class="reviews">(142 reviews)</span>
+                                </div>
+                                <button class="btn btn-primary" onclick="bookActivity(4)">
+                                    <i class="fas fa-calendar-plus"></i> Book Now
+                                </button>
+                            </div>
+                            <div class="animal-name">Impeccable Alligator</div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="pagination">
+                    <button class="page-btn">
+                        <i class="fas fa-chevron-left"></i>
+                    </button>
+                    <button class="page-btn active">1</button>
+                    <button class="page-btn">2</button>
+                    <button class="page-btn">3</button>
+                    <button class="page-btn">4</button>
+                    <button class="page-btn">
+                        <i class="fas fa-chevron-right"></i>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+<script src="JS/script.js"></script>
+    <script>
+        function bookActivity(activityId) {
+            alert(`Booking activity #${activityId}\nData will be saved to backend database.`);
+            
+        }
+        
+        document.getElementById('searchInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    console.log('Searching for:', query);
+                    alert(`Searching for "${query}" in backend database...`);
+                }
+            }
+        });
+        
+        document.querySelectorAll('.filter-option').forEach(option => {
+            option.addEventListener('click', function() {
+                const label = this.querySelector('.option-label').textContent;
+                console.log('Filter by:', label);
+            });
+        });
+    </script>
+</body>
+</html>

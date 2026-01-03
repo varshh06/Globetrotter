@@ -1,0 +1,243 @@
+<html >
+<head>
+    <title>GlobalTrotter - My Trips</title>
+    <link rel="stylesheet" href="CSS/styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+</head>
+<body>
+ 
+    <nav class="navbar">
+    <div class="nav-container">
+
+        <div class="nav-logo">
+            <a href="dashboard.html">GlobalTrotter</a>
+        </div>
+
+        <ul class="nav-links">
+            <li><a href="dashboard.html">Dashboard</a></li>
+            <li><a href="calendar.html">Calendar</a></li>
+            <li><a href="trip-list.html" class="active">Trips</a></li>
+            <li><a href="create-trip.html">Create Trip</a></li>
+            <li><a href="search.html">Search</a></li>
+            <li><a href="admin.html">Admin</a></li>
+            <li><a href="user-profile.html">Profile</a></li>
+        </ul>
+
+    </div>
+</nav>
+
+    <div class="container">
+        <div class="trips-header">
+            <h1 class="trips-title">My Trips</h1>
+            <p class="trips-subtitle">Manage and view all your travel plans</p>
+            
+            <div class="view-toggle" style="margin-top: 20px;">
+                <button class="view-btn active" onclick="setView('grid')">
+                    <i class="fas fa-th-large"></i> Grid View
+                </button>
+                <button class="view-btn" onclick="setView('list')">
+                    <i class="fas fa-list"></i> List View
+                </button>
+                <button class="view-btn" onclick="setView('calendar')">
+                    <i class="fas fa-calendar"></i> Calendar
+                </button>
+            </div>
+        </div>
+
+        <div class="trip-category">
+            <div class="category-header">
+                <h2 class="category-title">
+                    <i class="fas fa-spinner category-icon ongoing-icon"></i>
+                    Ongoing
+                    <span class="category-count" id="ongoingCount">0</span>
+                </h2>
+                <div style="color: #666; font-size: 14px;">
+                    Currently active trips
+                </div>
+            </div>
+            
+            <div class="trips-grid" id="ongoingTrips">
+            </div>
+        </div>
+
+        <div class="trip-category">
+            <div class="category-header">
+                <h2 class="category-title">
+                    <i class="fas fa-calendar-plus category-icon upcoming-icon"></i>
+                    Upcoming
+                    <span class="category-count" id="upcomingCount">0</span>
+                </h2>
+                <div style="color: #666; font-size: 14px;">
+                    Future travel plans
+                </div>
+            </div>
+            
+            <div class="trips-grid" id="upcomingTrips">
+            </div>
+        </div>
+
+        <div class="trip-category">
+            <div class="category-header">
+                <h2 class="category-title">
+                    <i class="fas fa-check-circle category-icon completed-icon"></i>
+                    Completed
+                    <span class="category-count" id="completedCount">0</span>
+                </h2>
+                <div style="color: #666; font-size: 14px;">
+                    Past travel experiences
+                </div>
+            </div>
+            
+            <div class="trips-grid" id="completedTrips">
+            </div>
+        </div>
+
+        <div id="emptyState" style="display: none;">
+            <div class="empty-state">
+                <div class="empty-icon">🌍</div>
+                <h3 class="empty-title">No trips yet</h3>
+                <p class="empty-description">
+                    You haven't created any trips. Start planning your next adventure!
+                </p>
+                <a href="create-trip.html" class="btn btn-success btn-large">
+                    <i class="fas fa-plus"></i> Plan Your First Trip
+                </a>
+            </div>
+        </div>
+    </div>
+
+   <script src="JS/script.js"></script>
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const userId = localStorage.getItem("userId");
+            if (userId) {
+                fetch(`http://localhost:8000/trips/${userId}`)
+                    .then(response => response.json())
+                    .then(data => {
+                        renderTrips(data);
+                    })
+                    .catch(error => {
+                        console.error('Error:', error);
+                        alert("Failed to load trips.");
+                    });
+            } else {
+                // Handle case where user is not logged in
+                document.getElementById('emptyState').style.display = 'block';
+                document.querySelectorAll('.trip-category').forEach(cat => {
+                    cat.style.display = 'none';
+                });
+            }
+        });
+
+        function renderTrips(trips) {
+            const ongoingTrips = document.getElementById('ongoingTrips');
+            const upcomingTrips = document.getElementById('upcomingTrips');
+            const completedTrips = document.getElementById('completedTrips');
+
+            ongoingTrips.innerHTML = '';
+            upcomingTrips.innerHTML = '';
+            completedTrips.innerHTML = '';
+
+            let ongoingCount = 0;
+            let upcomingCount = 0;
+            let completedCount = 0;
+
+            if (trips.length === 0) {
+                document.getElementById('emptyState').style.display = 'block';
+                document.querySelectorAll('.trip-category').forEach(cat => {
+                    cat.style.display = 'none';
+                });
+                return;
+            }
+
+            trips.forEach(trip => {
+                const tripCard = `
+                    <div class="trip-card" onclick="viewTrip(${trip.id})">
+                        <div class="trip-image">
+                            <div style="width: 100%; height: 100%; background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);"></div>
+                            <div class="trip-status status-${trip.status.toLowerCase()}">${trip.status}</div>
+                        </div>
+                        <div class="trip-content">
+                            <div class="trip-header">
+                                <div>
+                                    <div class="trip-name">${trip.title}</div>
+                                    <div class="trip-dates">
+                                        <i class="far fa-calendar-alt"></i>
+                                        ${new Date(trip.start_date).toLocaleDateString()} - ${new Date(trip.end_date).toLocaleDateString()}
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="trip-destination">
+                                <i class="fas fa-map-marker-alt"></i>
+                                ${trip.destination || 'TBD'}
+                            </div>
+                        </div>
+                    </div>
+                `;
+                if (trip.status === 'Ongoing') {
+                    ongoingTrips.innerHTML += tripCard;
+                    ongoingCount++;
+                } else if (trip.status === 'Upcoming') {
+                    upcomingTrips.innerHTML += tripCard;
+                    upcomingCount++;
+                } else if (trip.status === 'Completed') {
+                    completedTrips.innerHTML += tripCard;
+                    completedCount++;
+                }
+            });
+
+            document.getElementById('ongoingCount').textContent = ongoingCount;
+            document.getElementById('upcomingCount').textContent = upcomingCount;
+            document.getElementById('completedCount').textContent = completedCount;
+        }
+        
+        function setView(viewType) {
+     
+            document.querySelectorAll('.view-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            
+            console.log(`Switching to ${viewType} view`);
+            
+            if (viewType === 'calendar') {
+                window.location.href = 'calendar.html';
+            }
+        }
+        
+        function viewTrip(tripId) {
+          
+            console.log(`Viewing trip #${tripId}`);
+            alert(`Loading trip details for trip #${tripId} from backend...`);
+            
+        }
+        
+        function viewDetails(tripId) {
+            event.stopPropagation();
+            alert(`Showing details for trip #${tripId}\n(Data would be fetched from backend)`);
+        }
+        
+        function manageTrip(tripId) {
+            event.stopPropagation();
+            alert(`Managing trip #${tripId}\nRedirecting to edit page...`);
+            
+        }
+        
+        document.querySelector('.search-bar input').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                const query = this.value.trim();
+                if (query) {
+                    console.log('Searching trips for:', query);
+                    alert(`Searching trips for "${query}" in backend database...`);
+                }
+            }
+        });
+        document.querySelectorAll('.filter-btn').forEach(btn => {
+            btn.addEventListener('click', function() {
+                const filterType = this.textContent;
+                console.log('Filter by:', filterType);
+            });
+        });
+    </script>
+</body>
+</html>

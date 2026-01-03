@@ -1,0 +1,210 @@
+<html >
+<head>
+    <title>GlobalTrotter - Login</title>
+
+    <link rel="stylesheet" href="CSS/styles.css">
+
+    <style>
+
+        body.logged-out .nav-links {
+            display: none !important;
+        }
+
+        body.logged-out .nav-container {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        body.logged-in .nav-container {
+            justify-content: space-between;
+        }
+
+        body.logged-in .nav-links {
+            display: flex;
+            gap: 20px;
+        }
+
+        .nav-links li {
+            list-style: none;
+        }
+
+        .nav-links a {
+            text-decoration: none;
+            color: inherit;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background-color: rgba(0,0,0,0.5);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+        }
+
+        .text-center {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body class="logged-out">
+
+
+<div class="container" style="max-width: 500px; margin-top: 100px;">
+    <div class="card">
+
+        <h1 class="text-center" style="margin-bottom: 30px; color: var(--primary-color);">
+            GlobalTrotter
+        </h1>
+
+        <div style="text-align: center; margin-bottom: 30px;">
+            <div style="width: 120px; height: 120px; border-radius: 50%;
+                        background-color: #e0e0e0; margin: 0 auto 20px;
+                        display: flex; align-items: center;
+                        justify-content: center; font-size: 40px; color: #999;">
+                👤
+            </div>
+        </div>
+
+        <form id="loginForm">
+            <div class="form-group">
+                <label class="form-label">Username</label>
+                <input type="text" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Password</label>
+                <input type="password" class="form-control" required>
+            </div>
+
+            <button type="submit" class="btn btn-primary"
+                    style="width: 100%; padding: 15px; margin-top: 20px;">
+                Login
+            </button>
+        </form>
+
+        <div style="text-align: center; margin-top: 20px;">
+            <p>
+                Don't have an account?
+                <a href="#" id="registerLink" style="color: var(--primary-color);">
+                    Register here
+                </a>
+            </p>
+        </div>
+
+    </div>
+</div>
+
+<div id="registerModal" class="modal">
+    <div class="modal-content card" style="max-width: 600px;">
+
+        <h2>Register New User</h2>
+
+        <form id="registerForm">
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">First Name</label>
+                    <input type="text" id="firstName" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Last Name</label>
+                    <input type="text" id="lastName" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Email Address</label>
+                <input type="email" id="email" class="form-control" required>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Phone Number</label>
+                <input type="tel" class="form-control" required>
+            </div>
+
+            <div class="grid-2">
+                <div class="form-group">
+                    <label class="form-label">City</label>
+                    <input type="text" class="form-control" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Country</label>
+                    <input type="text" class="form-control" required>
+                </div>
+            </div>
+
+            <div class="form-group">
+                <label class="form-label">Additional Information</label>
+                <textarea class="form-control" rows="3"></textarea>
+            </div>
+
+            <div style="display: flex; gap: 10px; margin-top: 20px;">
+                <button type="submit" class="btn btn-success" style="flex: 1;">
+                    Register User
+                </button>
+                <button type="button" id="cancelRegister" class="btn btn-secondary">
+                    Cancel
+                </button>
+            </div>
+        </form>
+
+    </div>
+</div>
+
+<script>
+    document.addEventListener("DOMContentLoaded", function () {
+        const isLoggedIn = localStorage.getItem("isLoggedIn");
+
+        if (isLoggedIn === "true") {
+            document.body.classList.remove("logged-out");
+            document.body.classList.add("logged-in");
+        } else {
+            document.body.classList.add("logged-out");
+        }
+    });
+
+    document.getElementById("loginForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        localStorage.setItem("isLoggedIn", "true");
+        localStorage.setItem("userId", "1"); // Dummy user ID
+        window.location.href = "dashboard.html";
+    });
+
+    document.getElementById("registerLink").addEventListener("click", function () {
+        document.getElementById("registerModal").style.display = "flex";
+    });
+
+    document.getElementById("cancelRegister").addEventListener("click", function () {
+        document.getElementById("registerModal").style.display = "none";
+    });
+
+    document.getElementById("registerForm").addEventListener("submit", function (e) {
+        e.preventDefault();
+        
+        const formData = new FormData();
+        formData.append('name', document.getElementById('firstName').value + ' ' + document.getElementById('lastName').value);
+        formData.append('email', document.getElementById('email').value);
+        formData.append('password', 'password'); // Dummy password
+        
+        fetch('http://localhost:8000/register', {
+            method: 'POST',
+            body: formData
+        })
+        .then(response => response.json())
+        .then(data => {
+            console.log(data);
+            alert("Registration successful!");
+            document.getElementById("registerModal").style.display = "none";
+        })
+        .catch(error => {
+            console.error('Error:', error);
+            alert("Registration failed!");
+        });
+    });
+</script>
+
+</body>
+</html>
